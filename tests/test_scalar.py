@@ -7,8 +7,6 @@ from minitorch import MathTestVariable
 
 
 # ## Task 1.1 - Test central difference
-
-
 @pytest.mark.task1_1
 def test_central_diff():
     d = central_difference(operators.id, 5, arg=0)
