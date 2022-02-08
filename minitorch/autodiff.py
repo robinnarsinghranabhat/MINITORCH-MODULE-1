@@ -274,7 +274,8 @@ class FunctionBase:
         # Tip: Note when implementing this function that
         # cls.backward may return either a value or a tuple.
         # TODO: Implement for Task 1.3.
-        raise NotImplementedError('Need to implement for Task 1.3')
+        derivatives = cls.backward( ctx, d_output )
+        return [ (inp, deriv) for inp,deriv in zip(inputs, derivatives) if not is_constant(inp) ]
 
 
 # Algorithms for backpropagation
@@ -284,7 +285,7 @@ def is_constant(val):
     return not isinstance(val, Variable) or val.history is None
 
 
-def topological_sort(variable):
+def topological_sort(node):
     """
     Computes the topological order of the computation graph.
 
@@ -296,7 +297,40 @@ def topological_sort(variable):
                             starting from the right.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    sorted_nodes = []
+    perm_visited = {}
+    temp_visited = {}
+
+    # Recursively Visit child node and add them
+    def visit(node):
+        
+        if node.name in perm_visited:
+            return
+        
+        if node.name in temp_visited:
+            raise Exception(f'{node} is not a Dag')
+        
+        temp_visited[ node.name ] = node
+
+        try:
+            for child_node in node.history.inputs:
+                visit(child_node)
+        except TypeError:
+            # Leaf Node reached. Skipping Now
+            pass
+        
+        del temp_visited[ node.name ]
+        perm_visited[ node.name ] = node
+        sorted_nodes.append(node)
+    
+    visit(node)
+    return sorted_nodes[::-1]
+
+
+
+
+
+
 
 
 def backpropagate(variable, deriv):

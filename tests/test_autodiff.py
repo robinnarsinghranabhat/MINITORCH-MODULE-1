@@ -138,3 +138,17 @@ def test_backprop4():
     var4 = Function1.apply(var2, var3)
     var4.backward(d_output=5)
     assert var0.derivative == 10
+
+
+# Custom Test for checking topological-Sort
+@pytest.mark.task1_4_extra
+def test_topological_sort():
+    var_x = minitorch.Scalar(2)
+    var_y = minitorch.Scalar(3)
+    var_z = minitorch.Mul.apply(var_x, var_y)
+    var_log_z = minitorch.Log.apply(var_z)
+    var_exp_z = minitorch.Exp.apply(var_z)
+    var_out = minitorch.Add.apply(var_log_z, var_exp_z)
+    sorted_nodes = minitorch.topological_sort(var_out)
+    expected_out = [var_out, var_exp_z, var_log_z, var_z, var_y, var_x]
+    assert sorted_nodes == expected_out
