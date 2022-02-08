@@ -105,15 +105,11 @@ class ScalarTrain:
 
 
 if __name__ == "__main__":
-    # PTS = 50
-    # HIDDEN = 2
-    # RATE = 0.01
-    # data = minitorch.datasets["Simple"](PTS)
-    # ScalarTrain(HIDDEN).train(data, RATE)
-
+    ## Experiment with Different Dataset with streamlit application
+    ## These are the default settings 
     PTS = 50
-    data = minitorch.datasets["Xor"](PTS)
-    HIDDEN = 3
-    RATE = 0.5
+    HIDDEN = 2
+    RATE = 0.01
+    data = minitorch.datasets["Simple"](PTS)
     ScalarTrain(HIDDEN).train(data, RATE)
 
